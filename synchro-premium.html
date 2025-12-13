@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Método SYNCHRO – Calculadora MC</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f5f5f5;
+}
+header {
+    text-align: center;
+    padding: 30px 0;
+}
+.logo {
+    width: 140px;
+    height: auto;
+    cursor: pointer;
+}
+h1 {
+    margin: 10px 0 5px;
+    font-size: 28px;
+}
+.subtitulo {
+    font-size: 15px;
+    color: #444;
+    margin-bottom: 20px;
+    text-align: center;
+}
+#calculadora {
+    display: none;
+    max-width: 700px;
+    margin: 0 auto 20px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+#calculadora h2 {
+    text-align: center;
+    margin-bottom: 15px;
+}
+.question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 8px 0;
+    text-align: left;
+}
+.question label {
+    flex: 1;
+}
+.question input {
+    width: 60px;
+    padding: 6px;
+    font-size: 16px;
+    text-align: center;
+    border-radius: 5px;
+    border: 1px solid #888;
+}
+.botoes {
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+#calcularBtn { background: #007bff; }
+#limparBtn { background: #cc0000; }
+.resultado-box {
+    margin-top: 20px;
+    background: #fafafa;
+    padding: 12px;
+    border-radius: 5px;
+    white-space: pre-wrap;
+    font-size: 15px;
+    color: #222;
+}
+</style>
+</head>
+<body>
+
+<header>
+    <img class="logo" src="https://i.imgur.com/1oY9JmI.jpeg" alt="logo synchro" onclick="abrirCalculadora()">
+    <h1>Método SYNCHRO</h1>
+    <div class="subtitulo">
+        Gilberto Moreira<br>
+        Psicanalista Clínico – CBO 2515-50
+    </div>
+</header>
+
+<div id="calculadora">
+  <h2>MC – Medidor de Coerência</h2>
+  
+  <div class="question"><label for="q1">Q1 – Ordem Visual:</label><input type="number" id="q1" min="1" max="10"></div>
+  <div class="question"><label for="q2">Q2 – Disciplina das 3 Prioridades:</label><input type="number" id="q2" min="1" max="10"></div>
+  <div class="question"><label for="q3">Q3 – ROI após Stress:</label><input type="number" id="q3" min="1" max="10"></div>
+  <div class="question"><label for="q4">Q4 – Protocolo +5 Minutos:</label><input type="number" id="q4" min="1" max="10"></div>
+  <div class="question"><label for="q5">Q5 – Paz Interna:</label><input type="number" id="q5" min="1" max="10"></div>
+  <div class="question"><label for="q6">Q6 – Recuperação Emocional:</label><input type="number" id="q6" min="1" max="10"></div>
+  <div class="question"><label for="q7">Q7 – Reação Emocional:</label><input type="number" id="q7" min="1" max="10"></div>
+  <div class="question"><label for="q8">Q8 – Humor Corrente:</label><input type="number" id="q8" min="1" max="10"></div>
+
+  <div class="botoes">
+      <button id="calcularBtn" onclick="calcular()">Calcular MC</button>
+      <button id="limparBtn" onclick="limpar()">Limpar</button>
+  </div>
+
+  <div id="resultado" class="resultado-box"></div>
+</div>
+
+<script>
+function abrirCalculadora() {
+    document.getElementById('calculadora').style.display = 'block';
+}
+
+function limitarValor(campo) {
+    let v = parseInt(campo.value);
+    if (v > 10) campo.value = 10;
+    if (v < 1 || isNaN(v)) campo.value = "";
+}
+
+document.querySelectorAll("input[type=number]").forEach(c => {
+    c.addEventListener("input", () => limitarValor(c));
+});
+
+function calcular() {
+    const valores = [];
+    for (let i = 1; i <= 8; i++) {
+        let v = document.getElementById("q" + i).value;
+        if (v === "" || v < 1 || v > 10) { alert("Preencha todas as notas entre 1 e 10."); return; }
+        valores.push(Number(v));
+    }
+
+    let media = (valores.reduce((a,b)=>a+b,0)/8).toFixed(1);
+    let msgs = [];
+
+    if (valores[0]<7) msgs.push("Q1: Protocolo +5 minutos");
+    if (valores[1]<7) msgs.push("Q2: Protocolo +5 minutos");
+    if (valores[2]<7) msgs.push("Q3: Protocolo +5 minutos");
+    if (valores[3]<7) msgs.push("Q4: ROI (Resposta de Ordem Imediata)");
+
+    const campos = ["Q5","Q6","Q7","Q8"];
+    for(let i=4;i<=7;i++){
+        if(valores[i]<7) msgs.push(campos[i-4]+": Reajuste de rotina + consultar terapeuta SYNCHRO");
+    }
+    if(msgs.length===0) msgs.push("Tudo coerente. Mantenha o ritmo do Método SYNCHRO.");
+
+    document.getElementById("resultado").innerText = "Sua nota MC: "+media+"\n\n"+msgs.join("\n");
+}
+
+function limpar() {
+    document.querySelectorAll("input").forEach(i=>i.value="");
+    document.getElementById("resultado").innerText="";
+}
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('service-worker.js')
+    .then(() => console.log('Service Worker MC registrado com sucesso!'))
+    .catch(err => console.log('Erro ao registrar Service Worker MC:', err));
+}
+</script>
+</
+</body>
+</html>
