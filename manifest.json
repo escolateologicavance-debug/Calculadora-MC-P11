@@ -1,7 +1,16 @@
-"icons": [
+{
+  "name": "Calculadora Synchro",
+  "short_name": "SYNCHRO",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "description": "Calculadora para Score Emocional.", // <-- Adicionamos esta linha
+  "icons": [
     {
-      "src": "synchro.png",  // <--- MUDANÇA AQUI!
+      "src": "synchro.png",  // <-- Corrigindo o caminho do seu ícone
       "sizes": "512x512",
       "type": "image/png"
     }
-]
+  ]
+}
